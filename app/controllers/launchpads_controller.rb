@@ -1,0 +1,2 @@
+class LaunchpadsController < ApplicationController
+end
