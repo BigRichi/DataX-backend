@@ -27,14 +27,13 @@ rockets.each do |rocket|
     }
     Rocket.create(new_rocket)
 end
-
 launchpad_uri = URI('https://api.spacexdata.com/v4/launchpads')
 launchpad_resp = Net::HTTP.get(launchpad_uri)
 launchpads = JSON.parse(launchpad_resp)
 
 launchpads.each do |launchpad|
     new_launchpad = {
-        id: launchpad["id"]
+        id: launchpad["id"] ,
         name: launchpad["name"] ,
         full_name: launchpad["full_name"] ,
         locality: launchpad["locality"] ,
@@ -50,24 +49,26 @@ launchpads.each do |launchpad|
     Launchpad.create(new_launchpad)
 end
 
-launchs_uri = URI('https://api.spacexdata.com/v4/launches')
-launchs_resp = Net::HTTP.get(launchs_uri)
-launchs = JSON.parse(launchs_resp)
+launches_uri = URI('https://api.spacexdata.com/v4/launches')
+launches_resp = Net::HTTP.get(launches_uri)
+launches = JSON.parse(launches_resp)
 
-launchs.each do |launch|
+launches.each do |launch|
     new_launch = {
-        id: launch["id"] ,
-        rocket_id: launch["rocket"] ,
-        launchpad_id: launch["launchpad"] ,
-        flckr_original: launch["links"]["flickr"]["original"] ,
-        webcast: launch["links"]["webcast"] ,
-        wikipedia: launch["links"]["wikipedia"] ,
-        success: launch["success"] ,
-        details: launch["details"] ,
-        flight_number: launch["flight_number"] ,
-        name: launch["name"] ,
-        launch_date_time: launch["date_utc"] ,
-        upcoming: launch["upcomming"] 
-    }
-    Launchpad.create(new_launchpad)
-end
+            id: launch["id"] ,
+            rocket_id: launch["rocket"] ,
+            launchpad_id: launch["launchpad"] ,
+            flckr_original: launch["links"]["flickr"]["original"] ,
+            webcast: launch["links"]["webcast"] ,
+            wikipedia: launch["links"]["wikipedia"] ,
+            success: launch["success"] ,
+            details: launch["details"] ,
+            flight_number: launch["flight_number"] ,
+            name: launch["name"] ,
+            launch_date_time: launch["date_utc"] ,
+            upcoming: launch["upcomming"] 
+        }
+        Launch.create(new_launch)
+    end
+    puts "seeded"
+    
