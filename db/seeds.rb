@@ -1,67 +1,73 @@
 # This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
 
-# Rocket.create(id: 'abc1')
-# Launchpad.create(id: 'abc1')
-# Launchpad.create(id: 'abc2')
-# Launchpad.create(id: 'abc3')
-# Launch.create(id: 'abc1', rocket_id: Rocket.first.id, launchpad_id: Launchpad.first.id)
-# Launch.create(id: 'abc2', rocket_id: Rocket.first.id, launchpad_id: Launchpad.second.id)
-# Launch.create(id: 'abc3', rocket_id: Rocket.first.id, launchpad_id: Launchpad.third.id)
+require 'net/http'
 
-# puts "seed good"
-# puts "---------"
-# puts "Rocket length: #{Rocket.all.length}"
-# puts "Launchpad length: #{Launchpad.all.length}"
-# puts "Launch length: #{Launch.all.length}"
-# puts "---------"
-# puts "Instances Good"
-# puts "---------"
-# puts "Rocket Launches #{Rocket.first.launches.length}"
+rockets_uri = URI('https://api.spacexdata.com/v4/rockets')
+rockets_resp = Net::HTTP.get(rockets_uri)
+rockets = JSON.parse(rockets_resp)
 
-# require 'net/http'
+rockets.each do |rocket|
+    new_rocket = {
+        id: rocket["id"] ,
+        height: rocket["height"]["meters"] ,
+        diameter: rocket["diameter"]["meters"] ,
+        mass: rocket["mass"]["kg"] ,
+        isp_sea_level: rocket["engines"]["isp"]["sea_level"] ,
+        isp_vacuum: rocket["engines"]["isp"]["vacuum"] ,
+        landing_legs: rocket["landing_legs"]["number"],
+        landing_legs_material: rocket["landing_legs"]["material"] ,
+        flickr_images: rocket["flickr_images"] ,
+        name: rocket["name"] ,
+        active: rocket["active"] ,
+        cost_per_launch: rocket["cost_per_launch"] ,
+        success_rate_pct: rocket["success_rate_pct"] ,
+        first_flight: rocket["first_flight"] ,
+        wikipedia: rocket["wikipedia"] ,
+        description: rocket["description"]
+    }
+    Rocket.create(new_rocket)
+end
 
+launchpad_uri = URI('https://api.spacexdata.com/v4/launchpads')
+launchpad_resp = Net::HTTP.get(launchpad_uri)
+launchpads = JSON.parse(launchpad_resp)
 
-# uri = URI('https://opentdb.com/api.php?amount=10&category=11&difficulty=hard')
-# resp = Net::HTTP.get(uri)
+launchpads.each do |launchpad|
+    new_launchpad = {
+        id: launchpad["id"]
+        name: launchpad["name"] ,
+        full_name: launchpad["full_name"] ,
+        locality: launchpad["locality"] ,
+        region: launchpad["region"] ,
+        timezone: launchpad["timezone"] ,
+        latitude: launchpad["latitude"] ,
+        longitude: launchpad["longitude"] ,
+        launch_attempts: launchpad["launch_attempts"] ,
+        launch_successes: launchpad["launch_successes"] ,
+        details: launchpad["details"] ,
+        status: launchpad["status"]
+    }
+    Launchpad.create(new_launchpad)
+end
 
-# questions = JSON.parse(resp)
+launchs_uri = URI('https://api.spacexdata.com/v4/launches')
+launchs_resp = Net::HTTP.get(launchs_uri)
+launchs = JSON.parse(launchs_resp)
 
-# # fuck = questions["results"].each { |q| q[0] }
-
-# fuckyes = questions["results"].each do |ques|
-#     # answers = []
-
-#     # ques["incorrect_answers"].each do |ic|
-#     #     answers << incorrect_answers
-#     # end
-
-#     # answers << ques["correct_answer"]
-
-#     question = {
-#         category: ques["category"],
-#         question_type: ques["type"],
-#         difficulty: ques["difficulty"],
-#         question: ques["question"],
-#         correct_answer: ques["correct_answer"],
-#         incorrect_answers: ques["incorrect_answers"],
-#         points: 10
-#     }
-
-
-
-#     # byebug
-
-#     Question.create(question)
-# end
-
-# # Question.create!(fuck)
-
-
-# # byebug
-
+launchs.each do |launch|
+    new_launch = {
+        id: launch["id"] ,
+        rocket_id: launch["rocket"] ,
+        launchpad_id: launch["launchpad"] ,
+        flckr_original: launch["links"]["flickr"]["original"] ,
+        webcast: launch["links"]["webcast"] ,
+        wikipedia: launch["links"]["wikipedia"] ,
+        success: launch["success"] ,
+        details: launch["details"] ,
+        flight_number: launch["flight_number"] ,
+        name: launch["name"] ,
+        launch_date_time: launch["date_utc"] ,
+        upcoming: launch["upcomming"] 
+    }
+    Launchpad.create(new_launchpad)
+end
