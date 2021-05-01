@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  resources :launch_reviews only: [:index, :show, :create]
+  resources :launch_reviews, only: [:index, :show, :create]
   resources :launches, only: [:index, :show]
   resources :launchpads, only: [:index, :show]
   resources :rockets, only: [:index, :show]

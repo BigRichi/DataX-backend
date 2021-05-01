@@ -68,7 +68,7 @@ ActiveRecord::Schema.define(version: 2021_04_27_202104) do
     t.string "name"
     t.boolean "active"
     t.integer "cost_per_launch"
-    t.boolean "success_rate_pct"
+    t.float "success_rate_pct"
     t.datetime "first_flight"
     t.string "wikipedia"
     t.string "description"
