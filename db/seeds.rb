@@ -66,7 +66,7 @@ launches.each do |launch|
             flight_number: launch["flight_number"] ,
             name: launch["name"] ,
             launch_date_time: launch["date_utc"] ,
-            upcoming: launch["upcomming"] 
+            upcoming: launch["upcoming"] 
         }
         Launch.create(new_launch)
     end
