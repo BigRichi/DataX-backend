@@ -11,11 +11,11 @@ class LaunchReviewsController < ApplicationController
     end
 
     def create
-        new_review = LaunchReview.create(launch_id: params[:launch_id], reviewer: params[:reviewer], present_at_launch: params[:present_at_launch],comment: params[:comment])
+        new_review = LaunchReview.create(launch_id: params[:launch_id], reviewer: params[:reviewer], present_at_launch: params[:present_at_launch], comment: params[:comment])
 
-        launch = launchReview.find(params[:launch_id])
-
-        render json: [{new_review, launch}]
+        launch = Launch.find(params[:launch_id])
+        
+        render json: launch
     end 
 
 end
